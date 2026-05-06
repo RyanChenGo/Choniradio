@@ -66,129 +66,17 @@ audio, video {
 </head>
 <body>
 <h1>BIENVENUE À LES CHRONIQUES</h1>
-<h2>Rechercher le Journal</h2>
-
-<input id="searchInput" placeholder="Ex: 2026-02-15 ou 15 février 2026">
-<button id="viewButton">Voir</button>
-<button id="downloadButton">Télécharger</button>
-
-<p id="message" style="color:red;"></p>
-
-<script>
-
-let journals = [];
-
-// ========================
-// 1️⃣ 加载 JSON
-// ========================
-fetch('./journal/index.json')
-  .then(res => res.json())
-  .then(data => {
-      journals = data;
-      console.log("Journals loaded:", journals);
-  });
-
-// ========================
-// 2️⃣ 事件绑定
-// ========================
-document.getElementById("viewButton")
-  .addEventListener("click", () => searchJournal(false));
-
-document.getElementById("downloadButton")
-  .addEventListener("click", () => searchJournal(true));
-
-document.getElementById("searchInput")
-  .addEventListener("keydown", function(e) {
-      if (e.key === "Enter") {
-          e.preventDefault();
-          searchJournal(false);
-      }
-  });
-
-// ========================
-// 3️⃣ 法语月份
-// ========================
-const monthsFR = {
-  "janvier":"01","février":"02","fevrier":"02",
-  "mars":"03","avril":"04","mai":"05","juin":"06",
-  "juillet":"07","août":"08","aout":"08",
-  "septembre":"09","octobre":"10",
-  "novembre":"11","décembre":"12","decembre":"12"
-};
-
-// ========================
-// 4️⃣ 日期标准化
-// ========================
-function normalizeInput(input) {
-
-    input = input.trim().toLowerCase();
-
-    if (/^\d{4}-\d{2}-\d{2}$/.test(input)) {
-        return input;
-    }
-
-    const parts = input.split(" ");
-    if (parts.length === 3) {
-        const day = parts[0].padStart(2,"0");
-        const month = monthsFR[parts[1]];
-        const year = parts[2];
-        if (month) return year + "-" + month + "-" + day;
-    }
-
-    return input;
-}
-
-// ========================
-// 5️⃣ 主逻辑
-// ========================
-function searchJournal(forceDownload) {
-
-    const input = document.getElementById("searchInput").value;
-    const message = document.getElementById("message");
-    message.textContent = "";
-
-    if (!input.trim()) return;
-
-    const normalized = normalizeInput(input);
-    const match = journals.find(j => j.date === normalized);
-
-    if (!match) {
-        message.textContent =
-            "Désolé, il n'y a pas de journal pour cette journée...";
-        return;
-    }
-
-    // 自动识别当前项目路径
-    const base = window.location.origin + 
-                 window.location.pathname.replace(/\/[^\/]*$/, '/');
-
-    const fullURL = new URL(match.url, base).href;
-
-    if (forceDownload) {
-        // 强制下载并保留扩展名
-        const fileName = match.url.split("/").pop();
-
-        const a = document.createElement("a");
-        a.href = fullURL;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    } else {
-        // 浏览模式
-        window.location.href = fullURL;
-    }
-}
-
-</script>
-<a href="journal/Les Chroniques - 2026-04-05.pdf">
-    Dernière Nouvelle - Voir ou télécharger ici
-</a>
+<h2>Journals</h2>
+<p>Nous avons transformé les journals en encyclopédie libre , visitez ryanchengo.github.io/apps/chronipedia.app/main.html</p>
 <br>
 <h2>Audio</h2>
+<br>
+<h3>EN DIRECT</h3>
 <a href="https://radio-ryan.mixlr.com/events" target="_blank">
-    Voir les événements (clique sur le live et écouter en direct , s'il n'y a pas , sortir , et fais quelque chose d'autre)
+    Balado En DIRECT
 </a>
+<br>
+<h3>Enregistré</h3>
 <details>
 <summary>Balado 15 Février 2026</summary>
 <audio controls>
@@ -203,30 +91,6 @@ function searchJournal(forceDownload) {
     </audio>
 </details>
 <br>
-<details>
-    <summary>Cliquer ici pour voir Introduction de Saison 2 , Balado !</summary>
-    <iframe src="https://archive.org/embed/les-chroniques-balado-saison-2" width="560" height="384" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="">
-    </iframe>
-</details>
-<h2>Vidéo</h2>
-<p style="text-align: center;">Nous sommes désolés , mais désormais(5 Avril 2026) , Le projet de vidéo sera annulé pour toujours .</p>
-<br>
-<h2>Journals payés</h2>
-<p style="color: red;">
-    Les journals payés sont seulement disponibles quand tu l'achètes en personne
-</p>
-<br>
-<dialog open>
-    <p>Utilisez BuildOurSite de Ryan ici 👇</p>
-    <a href="https://ryanchengo.github.io/ryan-buildoursite/" target="_blank">
-        Clique moi !
-    </a>
-    <form method="dialog">
-        <button onclick="alert('Ad fermé par Google®')">
-            Fermer
-        </button>
-    </form>
-</dialog>
 <br>
 <footer>
 <p style="color: gray; text-align: center">
